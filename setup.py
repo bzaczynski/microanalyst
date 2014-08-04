@@ -4,7 +4,7 @@ from distutils.core import setup
 
 
 def get_readme_content():
-    with open('README') as file_handle:
+    with open('README.md') as file_handle:
         return file_handle.read()
 
 
