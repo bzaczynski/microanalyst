@@ -20,7 +20,7 @@ Microanalyst is a set of Python scripts for the analysis and visualization of da
 
 ### Usage
 
-Refer to [documentation](https://readthedocs.org/projects/microanalyst) for details.
+Refer to [documentation](http://microanalyst.readthedocs.org/en/latest/) for details.
 
 
 ### Unit Testing
