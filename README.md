@@ -35,4 +35,4 @@ Refer to [documentation](https://readthedocs.org/projects/microanalyst) for deta
 
 ### License
 
-This project is licensed under the [MIT License](https://github.com/bzaczynski/microanalyst/LICENSE).
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/bzaczynski/microanalyst/master/LICENSE).
