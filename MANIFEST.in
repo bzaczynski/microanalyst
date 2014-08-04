@@ -1,0 +1,3 @@
+include LICENSE
+recursive-include scripts *.py
+recursive-include test *.py

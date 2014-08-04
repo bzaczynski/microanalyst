@@ -1,0 +1,16 @@
+# distutils artifacts
+build/
+dist/
+MANIFEST
+
+# Python byte-compiled files
+*.pyc
+*.pyo
+
+# eclipse project files
+.project
+.pydevproject
+
+# PyCharm / IntelliJ Idea project files
+.idea/
+.~*
