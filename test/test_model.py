@@ -964,6 +964,129 @@ class TestGenes(unittest.TestCase):
         # then
         self.assertTrue(num_used < num_all)
 
+    def test_do_not_confuse_iteration_zero_index_for_none(self):
+
+        # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        copy1 = model.genes()[0].values(iteration=0, spreadsheet=0)
+        copy2 = model.genes()[0].values(iteration=None, spreadsheet=0)
+
+        # then
+        self.assertFalse((copy1 == copy2).all())
+
+    def test_do_not_confuse_spreadsheet_zero_index_for_none(self):
+
+        # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        copy1 = model.genes()[0].values(spreadsheet=0, iteration=0)
+        copy2 = model.genes()[0].values(spreadsheet=None, iteration=0)
+
+        # then
+        self.assertFalse((copy1 == copy2).all())
+
+    def test_return_same_values_as_with_model_values(self):
+
+        # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        for gene in model.genes():
+
+            actual = gene.values()
+            expected = model.values(microplate=gene.microplate_name, well=gene.well_name)
+
+            # then
+            self.assertTrue((actual == expected).all())
+
+    def test_return_scalar_if_both_parameters_are_specified(self):
+
+        # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        actual = model.genes()[0].values(iteration=0, spreadsheet=0)
+
+        # then
+        self.assertIsInstance(actual, float)
+
+    def test_representative_values_for_an_iteration_filter(self):
+
+        # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        for gene in model.genes():
+
+            actual = gene.values(iteration=1)
+            expected = model.values(iteration=1,
+                                    microplate=gene.microplate_name,
+                                    well=gene.well_name)
+
+            # then
+            self.assertTrue((actual == expected).all())
+
+    def test_representative_values_for_a_spreadsheet_filter(self):
+
+                # given
+        genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
+
+        iterations = TestModel.with_random_values(
+           [['001', '002'], ['001', '002']],
+           [['001', '002'], ['001', '002']]
+        ).json_data['iterations']
+
+        model = Model({'genes': genes, 'iterations': iterations})
+
+        # when
+        for gene in model.genes():
+
+            actual = gene.values(spreadsheet=1)
+            expected = model.values(spreadsheet=1,
+                                    microplate=gene.microplate_name,
+                                    well=gene.well_name)
+
+            # then
+            self.assertTrue((actual == expected).all())
+
 
 class TestValues(unittest.TestCase):
 

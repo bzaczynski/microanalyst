@@ -2,7 +2,7 @@
 
 # The MIT License (MIT)
 #
-# Copyright (c) 2013 Bartosz Zaczynski
+# Copyright (c) 2013, 2014 Bartosz Zaczynski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -31,13 +31,14 @@ from microanalyst.model.commons import flatten, slice_or_index
 class Gene(str):
     """Gene name and its associated (microplate, well) pair."""
 
-    def __new__(cls, name, well, microplate):
+    def __new__(cls, model, name, well, microplate):
         return str.__new__(cls, name)
 
-    def __init__(self, name, well, microplate):
+    def __init__(self, model, name, well, microplate):
 
         super(Gene, self).__init__()
 
+        self.model = model
         self.name = name
         self.well_name = well
         self.microplate_name = microplate
@@ -45,22 +46,34 @@ class Gene(str):
     def __call__(self):
         return (self.microplate_name, self.well_name)
 
+    def values(self, iteration=None, spreadsheet=None):
+        """Return data samples corresponding to a gene.
+           >>> gene.values()
+           [[ 0.7385      0.66869998  0.66420001]
+            [ 0.74629998  0.70660001  0.63870001]
+            [ 0.71689999  0.78380001  0.72259998]]
+        """
+        return self.model.values(iteration=iteration,
+                                 spreadsheet=spreadsheet,
+                                 microplate=self.microplate_name,
+                                 well=self.well_name)
+
 
 class Genes(object):
     """Helper class for handling genes' names."""
 
-    def __init__(self, json_data, microplate_names):
+    def __init__(self, model, microplate_names):
 
-        if not u'genes' in json_data:
+        if not u'genes' in model.json_data:
             self.genes = None
         else:
 
-            genes_json = json_data[u'genes']
+            genes_json = model.json_data[u'genes']
 
             self.microplate_names_with_genes = sorted(set(genes_json))
             self.microplate_names = microplate_names
 
-            self.genes = self._process(genes_json)
+            self.genes = self._process(model, genes_json)
             self.indexof = {
                 x: i for i, x in enumerate(self.microplate_names_with_genes)
             }
@@ -101,7 +114,7 @@ class Genes(object):
 
         return sorted(set(genes))
 
-    def _process(self, genes_json):
+    def _process(self, model, genes_json):
         """Return a 2d array (microplate x well) of gene names."""
 
         microplates = []
@@ -110,7 +123,7 @@ class Genes(object):
             for well in welladdr.names():
                 if well in genes_json[microplate]:
                     name = genes_json[microplate][well]
-                    wells.append(Gene(name, well, microplate))
+                    wells.append(Gene(model, name, well, microplate))
                 else:
                     wells.append(None)
             microplates.append(wells)

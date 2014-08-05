@@ -97,6 +97,14 @@ Instances of genes are also callable function objects::
  Q0017 (u'001', u'D6')
  (...)
 
+Finally, they can be used to quickly obtain corresponding data samples with a convenience method which is a wrapper over model's ``values()``. By default all experiment iterations and spreadsheets are taken into account but this can be restricted with two optional parameters, i.e. ``iteration`` and ``spreadsheet`` (both are 0-based indices). Example::
+
+ >>> for gene in model.genes_used():
+ >>>     print gene.values().ravel()
+ [0.6780999898910522, 0.6870999932289124, 0.6870999932289124, (...)]
+ [0.633899986743927, 0.7077000141143799, 0.679099977016449, (...)]
+ (...)
+
 Well Values
 ^^^^^^^^^^^
 

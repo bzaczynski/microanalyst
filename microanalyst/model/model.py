@@ -56,7 +56,7 @@ class Model(object):
 
         microplate_names = self.microplate_names()
 
-        self._genes = Genes(self.json_data, microplate_names)
+        self._genes = Genes(self, microplate_names)
         self._array4d = get_array4d(self.json_data, microplate_names)
         self._control_mask = control.get_mask(self.json_data, microplate_names)
 
