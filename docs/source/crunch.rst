@@ -138,7 +138,7 @@ There is also a mask for quick retrieval of control wells which can be used to e
 
     Gaps in data samples may cause discrepancies in the total number of control wells reported. Missing microplates are not accounted for when using ``control_mask`` or when iterating over array dimensions, e.g.::
 
-     >>> len(model.array4d[model.control_mask.values]
+     >>> len(model.array4d[model.control_mask.values])
      2056
      >>>
      >>> max_i, max_s, max_m, max_w = model.array4d.shape
