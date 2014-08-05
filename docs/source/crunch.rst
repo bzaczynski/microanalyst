@@ -134,6 +134,38 @@ There is also a mask for quick retrieval of control wells which can be used to e
 
  >>> model.array4d[(model.array4d <= 0.2) & ~model.control_mask.values] = 0.0
 
+.. warning::
+
+    Gaps in data samples may cause discrepancies in the total number of control wells reported. Missing microplates are not accounted for when using ``control_mask`` or when iterating over array dimensions, e.g.::
+
+     >>> len(model.array4d[model.control_mask.values]
+     2056
+     >>>
+     >>> max_i, max_s, max_m, max_w = model.array4d.shape
+     >>> num_control = 0
+     >>> for i in xrange(max_i):
+     >>>     for s in xrange(max_s):
+     >>>         for m in xrange(max_m):
+     >>>             for w in xrange(max_w):
+     >>>                 if model.is_control(i, s, m, w):
+     >>>                     num_control += 1
+     >>> num_control
+     2056
+
+    To obtain an actual number of control wells, i.e. without missing data samples, iterate over raw JSON::
+
+     >>> from microanalyst.model import welladdr
+     >>>
+     >>> num_control = 0
+     >>> for i, iteration in enumerate(model.json_data['iterations']):
+     >>>     for s, spreadsheet in enumerate(iteration['spreadsheets']):
+     >>>         for m in spreadsheet['microplates']:
+     >>>             for w in welladdr.names():
+     >>>                 if model.is_control(i, s, m, w):
+     >>>                     num_control += 1
+     >>> num_control
+     2042
+
 File names
 ^^^^^^^^^^
 
