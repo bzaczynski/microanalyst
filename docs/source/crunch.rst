@@ -88,6 +88,9 @@ Genes shown in previous examples are not just textual names but fully-fledged ob
  Gene "Q0017" is located on microplate "001" at well "D6".
  (...)
 
+.. note::
+    It is assumed that genes are bijectively mapped to (microplate, well) pairs. If a gene occurs more than once, i.e. duplicates are found on one or more microplates, this may lead to undefined and faulty results.
+
 Instances of genes are also callable function objects::
 
  >>> for gene in model.genes():
