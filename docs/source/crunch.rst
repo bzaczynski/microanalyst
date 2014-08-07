@@ -137,7 +137,7 @@ There is also a mask for quick retrieval of control wells which can be used to e
 
  >>> model.array4d[(model.array4d <= 0.2) & ~model.control_mask.values] = 0.0
 
-.. warning::
+.. note::
 
     Gaps in data samples may cause discrepancies in the total number of control wells reported. Missing microplates are not accounted for when using ``control_mask`` or when iterating over array dimensions, e.g.::
 
