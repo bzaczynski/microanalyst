@@ -72,9 +72,14 @@ Genes can be restricted to a given microplate, well or both. The ``microplate`` 
  >>> model.genes(microplate='B002')
  ['YBL097W', 'YBR004C', 'YBR021W', 'YBR174C', (...)]
 
-Getting a single gene rather than an array is done with a ``gene()`` method which expects both arguments::
+Getting a single gene rather than an array is done with a ``gene_at()`` method which expects both arguments::
 
- >>> model.gene(microplate='B002', well='E8')
+ >>> model.gene_at(microplate='B002', well='E8')
+ 'YBL097W'
+
+Alternatively to obtain a gene by its name (case insensitive)::
+
+ >>> model.gene('ybl097w')
  'YBL097W'
 
 Genes shown in previous examples are not just textual names but fully-fledged objects encapsulating useful information::
@@ -89,7 +94,7 @@ Genes shown in previous examples are not just textual names but fully-fledged ob
  (...)
 
 .. note::
-    It is assumed that genes are bijectively mapped to (microplate, well) pairs. If a gene occurs more than once, i.e. duplicates are found on one or more microplates, this may lead to undefined and faulty results.
+    It is assumed that genes are bijectively mapped to (microplate, well) pairs. If a gene occurs more than once, i.e. duplicates are found on one or more microplates, this may lead to undefined and faulty results. Textual warnings are issued for duplicate instances of genes.
 
 Instances of genes are also callable function objects::
 
