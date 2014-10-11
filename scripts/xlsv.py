@@ -77,7 +77,7 @@ class VerticalTemplate(template.Template):
             else:
                 sheet.write(first_row + i, 1, well_name, self.styles('.header'))
 
-            gene_name = self.model.gene(well_name, microplate_name)
+            gene_name = self.model.gene_at(well_name, microplate_name)
 
             if gene_name:
                 sheet.write(first_row + i, 2, gene_name, self.styles('.header'))

@@ -22,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import sys
 import numpy
 
 from microanalyst.model import welladdr
@@ -65,23 +66,44 @@ class Genes(object):
     def __init__(self, model, microplate_names):
 
         if not u'genes' in model.json_data:
-            self.genes = None
+            self.genes_matrix = None
         else:
 
             genes_json = model.json_data[u'genes']
 
-            self.microplate_names_with_genes = sorted(set(genes_json))
             self.microplate_names = microplate_names
-
-            self.genes = self._process(model, genes_json)
+            self.microplate_names_with_genes = sorted(set(genes_json))
             self.indexof = {
                 x: i for i, x in enumerate(self.microplate_names_with_genes)
             }
 
+            self.genes_matrix = self._process(model, genes_json)
+
+            self.genes = {}
+            for gene in self.genes_matrix.ravel():
+                if gene:
+                    gene_name = gene.name.lower()
+                    if gene_name in self.genes:
+                        self.genes[gene_name].append(gene)
+                    else:
+                        self.genes[gene_name] = [gene]
+
+            self._check_duplicates()
+
+    def get_by_name(self, name):
+        """Get gene by its name (case insensitive)."""
+
+        name = name.lower()
+
+        if name in self.genes:
+            return self.genes[name][0]
+        else:
+            return None
+
     def get(self, well, microplate):
         """Return a sorted list of genes' names."""
 
-        if self.genes is None:
+        if self.genes_matrix is None:
             return []
 
         if microplate is None:
@@ -98,14 +120,14 @@ class Genes(object):
         y = slice_or_index(welladdr.indexof(well))
 
         if not (well is None or microplate is None):
-            return flatten([self.genes[x, y]])
+            return flatten([self.genes_matrix[x, y]])
         else:
-            return sorted(set(flatten(self.genes[x, y])))
+            return sorted(set(flatten(self.genes_matrix[x, y])))
 
     def get_used(self):
         """Return a sorted list of genes' names used in the experiment."""
 
-        if self.genes is None:
+        if self.genes_matrix is None:
             return []
 
         genes = []
@@ -129,3 +151,21 @@ class Genes(object):
             microplates.append(wells)
 
         return numpy.array(microplates)
+
+    def _check_duplicates(self):
+        """Warn about duplicate instances of genes on microplates."""
+
+        duplicates = set()
+        for name in self.genes:
+            if len(self.genes[name]) > 1:
+                duplicates.add(name)
+
+        for name in sorted(duplicates):
+
+            original_name = self.genes[name][0].name
+            instances = ['("%s"/%s)' % (
+                x.microplate_name, x.well_name) for x in self.genes[name]
+            ]
+
+            message = 'Warning: duplicate gene "%s" at %s'
+            print >> sys.stderr, message % (original_name, ', '.join(instances))

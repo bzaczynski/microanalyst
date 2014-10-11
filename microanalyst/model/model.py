@@ -101,7 +101,11 @@ class Model(object):
         """Return a list of spreadsheets' filenames in their original order."""
         return self._filenames.get(with_path, iteration)
 
-    def gene(self, well, microplate):
+    def gene(self, name):
+        """Return gene identified by a given name."""
+        return self._genes.get_by_name(name)
+
+    def gene_at(self, well, microplate):
         """Return gene name for a given (microplate, well) pair."""
         matched_genes = self.genes(well, microplate)
         return matched_genes[0] if len(matched_genes) > 0 else None

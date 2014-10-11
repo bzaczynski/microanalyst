@@ -63,7 +63,7 @@ class HorizontalTemplate(template.Template):
             else:
                 sheet.write(1 + i, 0, well_name, self.styles('.header'))
 
-            gene_name = self.model.gene(well_name, microplate_name)
+            gene_name = self.model.gene_at(well_name, microplate_name)
 
             if gene_name:
                 sheet.write(1 + i, 1, gene_name, self.styles('.header'))

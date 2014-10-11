@@ -772,7 +772,7 @@ class TestGenes(unittest.TestCase):
         model = TestModel.with_genes({'001':{'A1':'foobar'}})
 
         # when
-        actual = model.gene('A1', '001')
+        actual = model.gene_at('A1', '001')
 
         # then
         self.assertIsInstance(actual, Gene)
@@ -783,7 +783,7 @@ class TestGenes(unittest.TestCase):
         model = TestModel.with_genes({'001':{'A1':'foobar'}})
 
         # when
-        actual = model.gene('A2', '001')
+        actual = model.gene_at('A2', '001')
 
         # then
         self.assertIsNone(actual)
