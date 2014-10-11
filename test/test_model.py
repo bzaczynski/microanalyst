@@ -1066,7 +1066,7 @@ class TestGenes(unittest.TestCase):
 
     def test_representative_values_for_a_spreadsheet_filter(self):
 
-                # given
+        # given
         genes = {'001': {'A5': 'foo'}, '002': {'G11': 'bar'}}
 
         iterations = TestModel.with_random_values(
@@ -1086,6 +1086,52 @@ class TestGenes(unittest.TestCase):
 
             # then
             self.assertTrue((actual == expected).all())
+
+    def test_get_gene_by_name_case_insensitive(self):
+
+        # given
+        model = TestModel.with_genes({'001': {'A1': 'tORF9', 'A2': 'foo'}})
+
+        # when
+        actual = model.gene('torf9')
+
+        # then
+        self.assertEqual('tORF9', actual.name)
+
+    def test_return_none_if_gene_name_not_found(self):
+
+        # given
+        model = TestModel.with_genes({'001': {'A1': 'foo', 'A2': 'bar'}})
+
+        # when
+        actual = model.gene('baz')
+
+        # then
+        self.assertIsNone(actual)
+
+    def test_return_first_gene_if_duplicates_found(self):
+
+        # given
+        model = TestModel.with_genes({
+            '001': {
+                'A1': 'foo',
+                'A2': 'bar',
+                'H12': 'foo'
+            },
+            '002': {
+                'A4': 'baz'
+            },
+            '003': {
+                'E4': 'foo'
+            }
+        })
+
+        # when
+        actual = model.gene('foo')
+
+        # then
+        self.assertEqual('001', actual.microplate_name)
+        self.assertEqual('A1', actual.well_name)
 
 
 class TestValues(unittest.TestCase):
