@@ -119,6 +119,7 @@ class Model(object):
         return self._genes.get_used()
 
     def is_control(self, iteration, spreadsheet, microplate, well):
+        """Check if a given microplate well is a control well."""
         return self.control_mask(iteration, spreadsheet, microplate, well)
 
     def values(self,
