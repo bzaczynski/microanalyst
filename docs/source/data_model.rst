@@ -12,7 +12,7 @@ Familiarity with data model used in microanalyst is central to understanding the
 * easily serieslized / deserieslized
 * plain text rather than binary
 
-However, the downside of using a text file instead of a binary one is redundancy and size which can grow to several megabytes very quickly.
+The downside of using a text file instead of binary one is redundancy which makes the file grow rapidly in size. This can be mitigated by the choice of a more compact format such as YAML. However, benchmarks have shown that despite being about half the size of a similar JSON file the serialization of YAML takes an order of magnitude more time.
 
 Schema
 ------
