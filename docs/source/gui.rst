@@ -7,4 +7,4 @@ Uses Tkinter under the hood.
 
 ::
 
-    $ microanalyst.pyw
+    $ manalyst.pyw
