@@ -10,7 +10,7 @@ $ python setup.py install
 
 ### Usage
 
-Refer to [documentation](http://microanalyst.readthedocs.org/en/latest/) for details.
+Refer to [documentation](http://microanalyst.readthedocs.io/en/latest/) for details.
 
 
 ### Unit Testing
